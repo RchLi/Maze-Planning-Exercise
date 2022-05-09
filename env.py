@@ -79,8 +79,16 @@ class MazeEnv:
 
     # return img of the current state, tensor [3, length, length]
     def img(self):
-        mz = self.maze.clone()
-        return torch.stack([mz, mz, mz]) / 4 + .25
+        # mz = self.maze.clone()
+        # return torch.stack([mz, mz, mz]) / 4 + .25
+        wall = torch.zeros(self.length, self.length)
+        wall[self.maze == -1] = .5
+        goal = torch.zeros(self.length, self.length)
+        goal[self.goal] = .5
+        cur = torch.zeros(self.length, self.length)
+        cur[self.current] = .5
+
+        return torch.stack([wall, goal, cur])
 
     # reset the maze to start position
     def reset(self):
