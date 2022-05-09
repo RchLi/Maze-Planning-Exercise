@@ -34,3 +34,4 @@ class Tester:
         return correct / len(self.dataset)
         
 
+   
