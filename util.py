@@ -5,7 +5,7 @@ import torch
 # output: accuracy
 
 class Tester:
-    def __init__(self, img_encoder, model, dataset, limit=15):
+    def __init__(self, img_encoder, model, dataset, limit=20):
         self.model = model
         self.img_encoder = img_encoder
         self.dataset = dataset
@@ -19,7 +19,7 @@ class Tester:
             mem_state = self.model.get_init_states()
             p_action = torch.zeros([1, 1, 4])
             for _ in range(self.limit):
-                img = task.img().unsqueeze(0)
+                img = task.transform(task.img()).unsqueeze(0)
                 img = self.img_encoder(img)
                 logit, mem_state = self.model(img, p_action, mem_state)     
                 logit = logit.flatten()

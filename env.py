@@ -4,6 +4,8 @@
 import numpy as np
 import torch
 import math
+from torchvision.transforms import Resize
+from torchvision.transforms import InterpolationMode
 
 class Name:
     down = 0
@@ -19,7 +21,7 @@ class Name:
 
 
 class MazeEnv:
-    def __init__(self, length=9, walls_count = 2):
+    def __init__(self, length=9, resize=18, walls_count = 2):
         self.length = length
         self.maze = torch.ones(length, length)
         self.walls_count = walls_count
@@ -27,6 +29,7 @@ class MazeEnv:
         self.start, self.goal = self.get_postion()
         self.current = self.start
         self.solution = None
+        self.transform = Resize((resize, resize), interpolation=InterpolationMode.NEAREST)
 
     
     # input: action, scalar
