@@ -59,26 +59,6 @@ class MazeEnv:
             self.current = loc_next
             return -1
 
-    # generate a random trajectory for pretraining
-    # return np array of size (size, 1)
-    def random_walk(self, num_step=50, state=True):
-        walks = []
-        num_voc = self.length**2 + 5
-        x, y = self.current
-        start = x * self.length + y
-        walks.append(start)
-        for _ in range(num_step):
-            action = np.random.randint(0, 4)
-            walks.append(action + self.length**2)
-            self.step(action)
-            if state:
-                x, y = self.current
-                walks.append(x * self.length + y)
-        if not state:
-            x, y = self.current
-            walks.append(x * self.length + y)
-
-        return np.array(walks)
 
     # return img of the current state, tensor [3, length, length]
     def img(self):
@@ -195,42 +175,3 @@ class MazeEnv:
         self.maze[xg, yg] = 3
 
         return (xs, ys), (xg, yg)
-
-    # convert number to action
-    def convert(self, num):
-        if num == 0:
-            return 'down'
-        elif num == 1:
-            return 'up'
-        elif num == 2:
-            return 'right'
-        elif num == 3:
-            return 'left'
-        else:
-            return num
-
-
-
-    # def state(self, cur_only=False):
-    #     mat_cur = torch.zeros(self.length, self.length)
-    #     mat_cur[self.current] = 1
-    #     mat_goal = torch.zeros(self.length, self.length)
-    #     mat_goal[self.goal] = 1
-    #     mat_obs = torch.zeros(self.length, self.length)
-    #     mat_obs[self.maze == -1] = 1
-        
-    #     if cur_only:
-    #         return mat_cur.view(-1)
-        
-    #     else:
-    #         return torch.stack([mat_obs, mat_goal, mat_cur])
-
-    # def initial(self):
-    #     mat_start = torch.zeros(self.length, self.length)
-    #     mat_start[self.start] = 1
-    #     mat_goal = torch.zeros(self.length, self.length)
-    #     mat_goal[self.goal] = 1
-    #     mat_obs = torch.zeros(self.length, self.length)
-    #     mat_obs[self.maze == -1] = 1
-        
-    #     return torch.stack([mat_start, mat_goal, mat_obs])

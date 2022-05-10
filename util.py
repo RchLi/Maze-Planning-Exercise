@@ -1,9 +1,6 @@
 import torch
 
 
-# input: model, dataset, 
-# output: accuracy
-
 class Tester:
     def __init__(self, img_encoder, model, dataset, limit=20):
         self.model = model
