@@ -35,30 +35,30 @@ class LSTM(nn.Module):
 class LSTM_Attn(nn.Module):
 
 
-    def __init__(self, channel_size = 64, att_size = 64, code_size = 256, hidden_size = 256, num_actions = 4):
+    def __init__(self, channel_size = 64, att_size = 128,  hidden_size = 256, num_actions = 4):
         super(LSTM_Attn, self).__init__()
-
+        self.att_size = att_size
         self.channel_size = channel_size
 
-        self.conv = nn.Conv2d(3, channel_size, 2, padding='same')
-        self.action_encoder = nn.Linear(num_actions, code_size)
-        self.img_encoder = nn.Linear(channel_size * 9 * 9, code_size)
+        self.img_encoder = nn.Conv2d(channel_size, att_size, 1)
+        self.action_encoder = nn.Linear(num_actions, hidden_size)
 
-        self.img_att = nn.Linear(channel_size, att_size)
+        self.img_att = nn.Linear(att_size, att_size)
         self.h_att = nn.Linear(hidden_size, att_size)
         self.full_att = nn.Linear(att_size, 1)
         self.softmax = nn.Softmax(dim=1)
 
-        self.working_memory = nn.LSTM(code_size, hidden_size)
+        self.working_memory = nn.LSTM(hidden_size, hidden_size)
         self.actor = nn.Linear(hidden_size + att_size, num_actions)
 
     def forward(self, img_code, action, mem_state):
-        mem_input = self.action_encoder(action)
+        action_input = self.action_encoder(action) 
+        mem_input = action_input 
 
         h_t, mem_state = self.working_memory(mem_input, mem_state)
 
-        # img_code = F.relu(self.conv(img_code))
-        img_code = img_code.permute(0, 2, 3, 1).view(1, -1, self.channel_size)
+        img_code = F.relu(self.img_encoder(img_code))
+        img_code = img_code.permute(0, 2, 3, 1).view(1, -1, self.att_size)
         att1 = F.relu(self.img_att(img_code))
         att2 = F.relu(self.h_att(h_t))
         att = self.full_att(att1 + att2).squeeze(2)
