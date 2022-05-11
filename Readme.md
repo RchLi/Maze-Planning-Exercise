@@ -57,3 +57,15 @@ Generated actions: right->right->right->right->right->right
 PCA results:
 
 ![pca3](img/pca_blocked.png)
+
+## Large maze
+Maze image:
+
+![maze4](img/maze_large.png)
+
+Generated actions: down->left->left->left->left->left->left->left->left->left->left->left->left->left->left->up->up->up->right->right
+
+
+PCA results:
+
+![pca3](img/pca_large.png)
