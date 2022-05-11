@@ -2,19 +2,19 @@
 Implementation of a simple visual navigation task.
 
 # Task Description
-At each step, the agent is given a maze image with its current location(blue block), walls(red block) and goal location(green block). The agent is then asked to generate actions that lead to the goal.
+At each step, the agent is given a maze image with its current location(blue block), walls(red block) and the goal location(green block). The agent is then asked to generate actions that lead to the goal.
 
 Example of image input:
 
 ![example](img/example.png)
 
 # Model Structure
-The input image is fed into a pretrained resnet to generate feature maps. The LSTM takes in previous action and generate attent maps to attend to the feature maps and generate actions accordingly.
+The input image is fed into a pretrained resnet to generate feature maps. The LSTM takes in the previous action and generate attention maps to attend to the feature maps and generate actions accordingly.
 
-![structure](img/structure.png)
+<img src="img/structure.png" width="500" >
 
 # Training
-The model is trained on 20000 different 9*9 mazes with imitation learning. The imitation learning's labels are generated  with a simple greedy search. The model is then tested on both large mazes (9\*9) and small mazes(3\*3). The model succeeds at solving the task if it can reach the goal with 10 steps otherwise fails.
+The model is trained on 20000 different 9*9 mazes with imitation learning. The imitation learning's labels are generated  with a simple greedy search. The model is then tested on both large mazes (9\*9) and small mazes(3\*3). The model succeeds if it can reach the goal within 10 steps otherwise fails.
 
 Model's performance with different training epochs:
 
